@@ -1,0 +1,50 @@
+#!/bin/bash
+
+SCHEDULED_CONF='/opt/nagios-control/config.conf'
+
+DISABLE_HOST_CMD="/opt/nagios-control/bin/disable_host_notification.sh"
+ENABLE_HOST_CMD="/opt/nagios-control/bin/enable_host_notification.sh"
+DISABLE_HOST_SERVICE_CMD="/opt/nagios-control/bin/disable_host_service_notification.sh"
+ENABLE_HOST_SERVICE_CMD="/opt/nagios-control/bin/enable_host_service_notification.sh"
+
+maintainTime() {
+
+  for (( i = 0; i < ${#HOST[@]}; i++ )); do
+    CURRENTIME=$(date +%H:%M)
+
+    # With Host and Service option.
+    if [ ! -z ${HOST[i]} ] && [ ! -z ${SERVICE[i]} ]; then
+      
+      if [[ "$CURRENTIME" > "${DOWNTIME[i]}" ]] && [[ "$CURRENTIME" < "${STARTIME[i]}" ]]; then
+        echo "$CURRENTIME - ${HOST[i]} service ${SERVICE[i]} is maintain time, then disable notification ..."
+        $DISABLE_HOST_SERVICE_CMD ${HOST[i]} ${SERVICE[i]}
+      else
+        echo "$CURRENTIME - ${HOST[i]} service ${SERVICE[i]} is work time, then enable notification ..."
+        $ENABLE_HOST_SERVICE_CMD ${HOST[i]} ${SERVICE[i]}
+      fi
+
+    elif [ ! -z ${HOST[i]} ] && [ -z ${SERVICE[i]} ]; then
+
+      if [[ "$CURRENTIME" > "${DOWNTIME[i]}" ]] && [[ "$CURRENTIME" < "${STARTIME[i]}" ]]; then
+        echo "$CURRENTIME - ${HOST[i]} is maintain time, then disable notification ..."
+        $DISABLE_HOST_CMD ${HOST[i]}
+      else
+        echo "$CURRENTIME - ${HOST[i]} is work time, then enable notification ..."
+        $ENABLE_HOST_CMD ${HOST[i]}
+      fi
+
+    fi
+  done
+}
+
+
+if [ ! -z $SCHEDULED_CONF ]; then
+  HOST=($(cat $SCHEDULED_CONF |awk -F',' '{print $1}'))
+  SERVICE=($(cat $SCHEDULED_CONF |awk -F',' '{print $2}'))
+  DOWNTIME=($(cat $SCHEDULED_CONF |awk -F',' '{print $3}'))
+  STARTIME=($(cat $SCHEDULED_CONF |awk -F',' '{print $4}'))
+else
+  echo "Scheduled config '$SCHEDULED_CONF' not found !! SCHEDULED_CONF"
+fi
+
+maintainTime
