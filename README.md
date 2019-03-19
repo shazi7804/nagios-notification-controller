@@ -1,4 +1,4 @@
-# Nagios Controller
+# Nagios Notification Controller
 
 ## Config Path
 
