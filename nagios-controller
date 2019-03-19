@@ -1,11 +1,11 @@
 #!/bin/bash
 
-SCHEDULED_CONF='/opt/nagios-control/config.conf'
+SCHEDULED_CONF='/opt/nagios-controller/config.conf'
 
-DISABLE_HOST_CMD="/opt/nagios-control/bin/disable_host_notification.sh"
-ENABLE_HOST_CMD="/opt/nagios-control/bin/enable_host_notification.sh"
-DISABLE_HOST_SERVICE_CMD="/opt/nagios-control/bin/disable_host_service_notification.sh"
-ENABLE_HOST_SERVICE_CMD="/opt/nagios-control/bin/enable_host_service_notification.sh"
+DISABLE_HOST_CMD="/opt/nagios-controller/bin/disable_host_notification.sh"
+ENABLE_HOST_CMD="/opt/nagios-controller/bin/enable_host_notification.sh"
+DISABLE_HOST_SERVICE_CMD="/opt/nagios-controller/bin/disable_host_service_notification.sh"
+ENABLE_HOST_SERVICE_CMD="/opt/nagios-controller/bin/enable_host_service_notification.sh"
 
 maintainTime() {
 
