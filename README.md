@@ -1,5 +1,7 @@
 # Nagios Notification Controller
 
+schedule specific time for nagios notifications
+
 ## Config Path
 
 Your can change `nagios.cmd` path in `bin/*.sh`
